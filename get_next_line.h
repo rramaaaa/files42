@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rajarada <rajarada@learner.42.tech>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/03 15:01:39 by rajarada          #+#    #+#             */
-/*   Updated: 2026/01/03 17:35:58 by rajarada         ###   ########.fr       */
+/*   By: rajarad <rajarad@learner.42.tech>          #+#  +:+       +#+        */
+/*                                               +#+  +:+       +#+           */
+/*   Created: 2026/01/01 22:13:15   by rajarad         #+#    #+#             */
+/*   Updated: 2026/01/01 22:13:15  by rajarad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# include <stddef.h>
+# include <stdlib.h>
 # include <limits.h>
+# include <unistd.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
@@ -26,10 +27,10 @@
 
 char	*get_next_line(int fd);
 
-char	*ft_strchr(const char *s, int c);
 size_t	ft_strlen(const char *s);
-char	*ft_strdup(const char *s);
-char	*ft_substr(const char *s, unsigned int start, size_t len);
-char	*ft_strjoin(const char *s1, const char *s2);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strdup(const char *s1);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
 
 #endif

@@ -3,16 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rajarada <rajarada@learner.42.tech>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/03 12:59:39 by rajarada          #+#    #+#             */
-/*   Updated: 2026/01/03 17:32:46 by rajarada         ###   ########.fr       */
+/*   By: rajarad <rajarad@learner.42.tech>          #+#  +:+       +#+        */
+/*                                               +#+  +:+       +#+           */
+/*   Created: 2026/01/01 16:13:02   by rajarad         #+#    #+#             */
+/*   Updated: 2026/01/01 16:13:02  by rajarad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <limits.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include "get_next_line.h"
 
 static char	*append_to_stash(char *stash, char *buf)
@@ -21,6 +18,8 @@ static char	*append_to_stash(char *stash, char *buf)
 
 	if (!stash)
 		stash = ft_strdup("");
+	if (!stash)
+		return (NULL);
 	tmp = ft_strjoin(stash, buf);
 	free(stash);
 	return (tmp);
@@ -39,18 +38,11 @@ static char	*read_to_stash(int fd, char *stash)
 	{
 		readn = read(fd, buf, BUFFER_SIZE);
 		if (readn < 0)
-		{
-			free(buf);
-			free(stash);
-			return (NULL);
-		}
+			return (free(buf), free(stash), NULL);
 		buf[readn] = '\0';
 		stash = append_to_stash(stash, buf);
 		if (!stash)
-		{
-			free(buf);
-			return (NULL);
-		}
+			return (free(buf), NULL);
 	}
 	free(buf);
 	return (stash);
@@ -80,11 +72,8 @@ static char	*update_stash(char *stash)
 	i = 0;
 	while (stash[i] && stash[i] != '\n')
 		i++;
-	if (stash[i] == '\0')
-	{
-		free(stash);
-		return (NULL);
-	}
+	if (!stash[i])
+		return (free(stash), NULL);
 	i++;
 	new_stash = ft_strdup(stash + i);
 	free(stash);
