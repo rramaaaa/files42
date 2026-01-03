@@ -3,22 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rajarad <rajarad@learner.42.tech>          #+#  +:+       +#+        */
-/*                                                +#+  +:+       +#+           */
-/*   Created: 2026/01/01 16:13:02   by rajarad         #+#    #+#             */
-/*   Updated: 2026/01/01 16:13:02  by rajarad         ###   ########.fr       */
+/*   By: rajarada <rajarada@learner.42.tech>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/03 12:59:39 by rajarada          #+#    #+#             */
+/*   Updated: 2026/01/03 17:32:46 by rajarada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <limits.h>
+#include <unistd.h>
+#include <stdlib.h>
 #include "get_next_line.h"
 
-static char *read_to_stash(int fd, char *stash)
+static char	*append_to_stash(char *stash, char *buf)
+{
+	char	*tmp;
+
+	if (!stash)
+		stash = ft_strdup("");
+	tmp = ft_strjoin(stash, buf);
+	free(stash);
+	return (tmp);
+}
+
+static char	*read_to_stash(int fd, char *stash)
 {
 	char	*buf;
 	ssize_t	readn;
-	char	*tem;
-	
-	buf = (char *)malloc((size_t)BUFFER_SIZE + 1);
+
+	buf = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buf)
 		return (NULL);
 	readn = 1;
@@ -32,11 +45,7 @@ static char *read_to_stash(int fd, char *stash)
 			return (NULL);
 		}
 		buf[readn] = '\0';
-		if (!stash)
-			stash = ft_strdup("");
-		tem = ft_strjoin(stash, buf);
-		free(stash);
-		stash = tem;
+		stash = append_to_stash(stash, buf);
 		if (!stash)
 		{
 			free(buf);
@@ -47,7 +56,7 @@ static char *read_to_stash(int fd, char *stash)
 	return (stash);
 }
 
-static char *extract_line(char *stash)
+static char	*extract_line(char *stash)
 {
 	size_t	i;
 
@@ -61,7 +70,7 @@ static char *extract_line(char *stash)
 	return (ft_substr(stash, 0, i));
 }
 
-static char *update_stash(char *stash)
+static char	*update_stash(char *stash)
 {
 	size_t	i;
 	char	*new_stash;
@@ -84,8 +93,9 @@ static char *update_stash(char *stash)
 
 char	*get_next_line(int fd)
 {
-	static char *stashes[OPEN_MAX];
-	char	*line;
+	static char	*stash[OPEN_MAX];
+	char		*line;
+
 	if (fd < 0 || fd >= OPEN_MAX || BUFFER_SIZE <= 0)
 		return (NULL);
 	stash[fd] = read_to_stash(fd, stash[fd]);
